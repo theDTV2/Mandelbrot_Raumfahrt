@@ -6,7 +6,7 @@ namespace Controller
     {
         static void Main(string[] args)
         {
-            if ()
+         
             string PortServer = args[0];
             string PortClient = args[1];
 

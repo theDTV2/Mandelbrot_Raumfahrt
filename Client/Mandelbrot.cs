@@ -2,51 +2,54 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Numerics;
-
+using System.Linq;
 
 namespace Client
 {
     class Mandelbrot
     {
-        public static void GenerateMandelbrotSet( float complexity, int iterations)  
+        public static byte[] GenerateMandelbrotSet( float complexity, int iterations)  
         {
             int sizex = 2;
             int sizey = 2;
+            double cj;
+            double ci;
+            Complex CurrComplex;
+            Complex[] Mandel;
 
-            Complex[] test = new Complex[90000];
-            int p = 0;
-
+            List<Complex> calcoutput = new List<Complex>();
             var StartTime = DateTime.Now;
 
             for (int i = 0; i < complexity; i++)
             {
-                double ci = (sizex * (i / complexity)) - sizex;
+                ci = (sizex * (i / complexity)) - sizex;
 
                 for (int j = 0; j < complexity; j++)
                 {
-                    double cj = (sizex * (j / complexity)) - sizey;
+                    cj = (sizex * (j / complexity)) - sizey;
 
-                    Complex CurrComplex = new Complex(ci, cj);
+                    CurrComplex = new Complex(ci, cj);
 
-                    Complex[] Mandel = new Complex[iterations];
+                    Mandel = new Complex[iterations];
                     Mandel[0] = 0;
                     for (int m = 1; m < iterations; m++)
                     {
                         Mandel[m] = (Mandel[m - 1] * Mandel[m - 1]) + CurrComplex;
                     }
-                    if (!Complex.IsNaN(Mandel[iterations - 1]))
-                        {
-                        test[p] = Mandel[iterations - 1];
-                        p++;
-                    }
+
+                        calcoutput.Add(Mandel[iterations - 1]);
 
                 }
             }
 
-
-
             var EndTime = DateTime.Now;
-            
+            System.Console.WriteLine("");
+            System.Console.WriteLine("Iterations: " + complexity + " Complexity " + iterations + " Time elapsed: " + EndTime.Subtract(StartTime));
+            System.Console.WriteLine("Hash: " + String.Join(", ", calcoutput).GetSHA384HashAsString());
+
+
+
+            return String.Join(", ", calcoutput).GetSHA384Hash();
         }
 
 
