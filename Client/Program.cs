@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Numerics;
+
 
 namespace Client
 {
@@ -6,7 +8,12 @@ namespace Client
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Mandelbrot.GenerateMandelbrotSet( 400, 500);
+
+
+
+
+
         }
     }
 }

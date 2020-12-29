@@ -6,7 +6,12 @@ namespace Controller
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            if ()
+            string PortServer = args[0];
+            string PortClient = args[1];
+
+
+            
         }
     }
 }
