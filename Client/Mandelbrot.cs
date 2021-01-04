@@ -8,11 +8,12 @@ namespace Client
 {
     class Mandelbrot
     {
-        private static int[] complexity = new int[4];
-        private static int[] iterations = new int[4];
+        private static readonly int[] complexity = new int[4];
+        private static readonly int[] iterations = new int[4];
 
-        private static byte[] GenerateMandelbrotSet( float complexity, int iterations)  
+        private static byte[] GenerateMandelbrotSet( float complexity, int iterations)
         {
+            System.Console.Write("Calculating Mandelbrot Set for complexity: " + complexity + ", iterations: " + iterations + " ...");
             int sizex = 2;
             int sizey = 2;
             double cj;
@@ -21,7 +22,6 @@ namespace Client
             Complex[] Mandel;
 
             List<Complex> calcoutput = new List<Complex>();
-
             for (int i = 0; i < complexity; i++)
             {
                 ci = (sizex * (i / complexity)) - sizex;
@@ -38,14 +38,11 @@ namespace Client
                     {
                         Mandel[m] = (Mandel[m - 1] * Mandel[m - 1]) + CurrComplex;
                     }
-
                         calcoutput.Add(Mandel[iterations - 1]);
-
                 }
             }
-            //System.Console.WriteLine("");
-            //System.Console.WriteLine("Iterations: " + complexity + " Complexity " + iterations + " Time elapsed: " + EndTime.Subtract(StartTime));
-           // System.Console.WriteLine("Hash: " + String.Join(", ", calcoutput).GetSHA384HashAsString());
+            System.Console.WriteLine("done");
+
             return String.Join(", ", calcoutput).GetSHA384Hash();
         }
 
@@ -69,7 +66,6 @@ namespace Client
         {
             for (int i = 0; i < 4; i++)
             {
-
                 NetworkConnector.SendData("START");
                 var toSend = Encoding.UTF8.GetString(Mandelbrot.GenerateMandelbrotSet(complexity[i], iterations[i]));
                 NetworkConnector.SendData("STOP");

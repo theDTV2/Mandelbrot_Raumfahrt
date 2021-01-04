@@ -6,6 +6,9 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Threading;
 using Server;
+using System.Reflection;
+
+
 
 namespace Server
 {
@@ -13,6 +16,10 @@ namespace Server
     {
         static void Main(string[] args)
         {
+            var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+            System.Console.WriteLine("Server, Version " + version);
+
+
             TcpListener server;
             if (args.Length == 0)
                 server = new TcpListener(IPAddress.Any, 442);
@@ -30,19 +37,15 @@ namespace Server
             while (true)
             {
                 
-                Console.WriteLine("Waiting for another connection");
+                Console.WriteLine("Waiting for connection");
                 TcpClient client = server.AcceptTcpClient();
-                Console.WriteLine("Connected new client, passing to new thread...");
+                Console.Write("Connected new client, passing to new thread...");
                 threadcount++;
                 var newThread = new Thread(() => ClientManager.Manage(client, threadcount));
                 networkWorkers.Add(newThread);
                 newThread.Start();
-
-                Console.WriteLine("Done, new Threadcount: " + threadcount);
-
-
-               
-
+                Console.WriteLine("done");
+                Console.WriteLine("New Threadcount: " + threadcount);
 
             }
 

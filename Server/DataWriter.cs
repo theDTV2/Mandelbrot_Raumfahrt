@@ -12,7 +12,7 @@ namespace Server
     class DataWriter
     {
         
-        private static ConcurrentBag<string> toWrite = new ConcurrentBag<string>();
+        private static readonly ConcurrentBag<string> toWrite = new ConcurrentBag<string>();
 
         private static StreamWriter dataFileStream;
 
@@ -20,7 +20,12 @@ namespace Server
         //Add Data to be written in a threadsafe way
         public static void WriteData(int WorkerID, string hash, double duration)
         {
-            var Message = "ID: " + WorkerID + " " + hash.Substring(0, 12) + " " + duration;
+            int complexity = Convert.ToInt32(hash.Substring(5, 3));
+            int iterations = Convert.ToInt32(hash.Substring(9, 3));
+
+
+            Console.WriteLine("Worker " + WorkerID + ": finished calculation, with parameters:" + complexity + " " + iterations + " in " + duration + " ms");
+
             toWrite.Add(hash.Substring(5, 6) +" " + Math.Round(duration,1));
         }
 
@@ -29,14 +34,17 @@ namespace Server
         {
             while (true)
             {
-                while (toWrite.TryTake(out string lineToWrite))
+                if (!toWrite.IsEmpty)
                 {
-                    dataFileStream.WriteLine(lineToWrite);
-                    
+                    Console.Write("Writing " + toWrite.Count + " entries to file...");
+                    while (toWrite.TryTake(out string lineToWrite))
+                    {
+                        dataFileStream.WriteLine(lineToWrite);
+
+                    }
+                    dataFileStream.Flush();
+                    Console.WriteLine("done");
                 }
-                dataFileStream.Flush();
-             
-                
 
 
 #if DEBUG
@@ -51,7 +59,7 @@ namespace Server
                     ZipOutputFile();
 #endif
                 //No need to check for new messages all the time
-                System.Threading.Thread.Sleep(2000);
+                System.Threading.Thread.Sleep(4000);
             }
         }
 
@@ -71,13 +79,11 @@ namespace Server
 
         private static void ZipOutputFile()
         {
-            System.Console.WriteLine("Zipping Data...");
+            System.Console.Write("Zipping Data...");
 
             var pathSource = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "outputfile";
             var pathSourceToZip = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "outputfiletozip";
             var pathTarget = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "outputfilezipped.zip";
-
-           
 
             if (File.Exists(pathSourceToZip))
                 File.Delete(pathSourceToZip);
@@ -94,7 +100,7 @@ namespace Server
         
 
         LastZipTime = DateTime.Now;
-            System.Console.WriteLine("Data zipped successfully");
+            System.Console.WriteLine("done");
 
 
             //This file acts as an Semaphore, the satellite has to wait until it disappears before it can copy the zip file

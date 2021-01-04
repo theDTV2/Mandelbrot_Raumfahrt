@@ -14,15 +14,15 @@ namespace Client
 
         public static void SetUpConnection(int Port)
         {
+            System.Console.Write("trying to connect...");
             client = new TcpClient("127.0.0.1", Port);
             stream = client.GetStream();
+            System.Console.WriteLine("connection established");
         }
 
         public static void SendData(string ToSend)
         {
-
-            byte[] ToSendBytes = new byte[384];
-            ToSendBytes = Encoding.UTF8.GetBytes(ToSend);
+            byte[] ToSendBytes = Encoding.UTF8.GetBytes(ToSend);
 
             //Server/Client agree to always use 384 byte size messages, so we fill up the missing characters with 0
             ToSendBytes = ToSendBytes.Concat(Enumerable.Repeat((byte)0x0, 384 - ToSendBytes.Length).ToArray()).ToArray();
@@ -30,11 +30,12 @@ namespace Client
 
         }
 
-        public static void SendData(int complexity, int hash, string toSend)
+        public static void SendData(int complexity, int iteration, string toSend)
         {
-            string data = "HASH " + complexity + " " + hash + " " + toSend;
-
+            string data = "HASH " + complexity + " " + iteration + " " + toSend;
+            System.Console.Write("Sending Hash for values: " + complexity + " " + iteration +"...");
             SendData(data);
+            System.Console.WriteLine("done");
         }
 
 

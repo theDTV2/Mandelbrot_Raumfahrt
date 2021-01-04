@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Numerics;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 
@@ -10,27 +11,36 @@ namespace Client
     {
         static void Main(string[] args)
         {
-            if (args.Length == 0)
-                NetworkConnector.SetUpConnection(442);
-            else
-                NetworkConnector.SetUpConnection(Convert.ToInt32(args[0]));
-            //Register with Server
-
-            /* //Start Calculation
-             while (true)
-             {
-                 //Send what we will calculate now
-                 //Calculate
-                 //Send, that we finished, and send result
-             } */
-
-            Mandelbrot.GenerateMandelBrotParams();
-            while (true)
+            var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+            System.Console.WriteLine("Client, Version " + version);
+            try
             {
-                Mandelbrot.DoMandelBrot();
+                if (args.Length == 0)
+                {
+                    System.Console.WriteLine("No Port provided, using default value");
+                    NetworkConnector.SetUpConnection(442);
+                }
+                else
+                {
+                    System.Console.WriteLine("Using provided port: " + args[0]);
+                    NetworkConnector.SetUpConnection(Convert.ToInt32(args[0]));
+                }
+
+                System.Console.WriteLine("Connected.");
 
 
-                Console.WriteLine("Loop done");
+                Mandelbrot.GenerateMandelBrotParams();
+                while (true)
+                {
+                    Mandelbrot.DoMandelBrot();
+                }
+            }
+
+            catch (Exception e)
+            {
+                System.Console.WriteLine("");
+                System.Console.WriteLine(e.Message);
+                return;
             }
 
         }
