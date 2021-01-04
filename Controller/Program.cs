@@ -9,7 +9,7 @@ namespace Controller
 {
     class Program
     {
-        static List<Process> processList = new List<Process>();
+        static readonly List<Process> processList = new List<Process>();
             
         static void Main(string[] args)
         {
@@ -21,8 +21,8 @@ namespace Controller
             
             if (args.Length == 0)    
             {
-                System.Console.Write("No Amount of Clients specified, using default value (3)");
-                amountOfClients = 3;
+                System.Console.Write("No Amount of Clients specified, using default value (2)");
+                amountOfClients = 2;
             }
             else
             {
@@ -34,7 +34,7 @@ namespace Controller
             while (true)
             {
                 System.Console.Write("Starting Server...");
-                processList.Add(Process.Start(ProcessVariables.GetServerVariable()));
+                processList.Add(Launcher.StartServerByOS());
                 System.Console.WriteLine("done");
 
 
@@ -44,7 +44,7 @@ namespace Controller
                 for (int i = 0; i < amountOfClients; i++)
                 {
                     System.Console.Write("Starting Client " + i +"...") ;
-                    processList.Add(Process.Start(ProcessVariables.GetClientVariable()));
+                    processList.Add(Launcher.StartClientByOS());
                     System.Console.WriteLine("done");
 
                 }

@@ -16,31 +16,80 @@ namespace Controller
 
         public static  ProcessStartInfo GetClientVariable()
         {
-            var clientpath = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "client" + Path.DirectorySeparatorChar + "Client.exe";
+            var clientPathWorking = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "client" + Path.DirectorySeparatorChar;
 
-            return new ProcessStartInfo
+            string clientpath;
+            if (OperatingSystem.IsWindows())
             {
-                WindowStyle = ProcessWindowStyle.Normal,
-                CreateNoWindow = false,
-                FileName = clientpath,
-                UseShellExecute = true
+                var clientPath = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "client" + Path.DirectorySeparatorChar + "Client.exe";
+                return new ProcessStartInfo
+                {
+                    WindowStyle = ProcessWindowStyle.Normal,
+                    CreateNoWindow = false,
+                    WorkingDirectory = clientPathWorking,
+                    FileName = clientPath,
+                    UseShellExecute = true
 
-            };
+                };
+            }
+            else
+            {
+                clientpath = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "client" + Path.DirectorySeparatorChar + "Client.dll";
+                return new ProcessStartInfo
+                {
+                    WindowStyle = ProcessWindowStyle.Normal,
+                    CreateNoWindow = false,
+                    FileName = "dotnet",
+                    WorkingDirectory = clientPathWorking,
+                    Arguments = clientpath,
+                    UseShellExecute = true
+
+                };
+
+            }
+
+          
         }
 
 
         public static ProcessStartInfo GetServerVariable()
         {
-            var serverpath = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "server" + Path.DirectorySeparatorChar + "Server.exe";
+            string serverpath;
+            var serverPathWorking = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "server" + Path.DirectorySeparatorChar;
 
-            return new ProcessStartInfo
+            if (OperatingSystem.IsWindows())
             {
-                WindowStyle = ProcessWindowStyle.Normal,
-                CreateNoWindow = false,
-                FileName = serverpath,
-                UseShellExecute = true
+                serverpath = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "server" + Path.DirectorySeparatorChar + "Server.exe";
+                return new ProcessStartInfo
+                {
+                    WindowStyle = ProcessWindowStyle.Normal,
+                    CreateNoWindow = false,
+                    WorkingDirectory = serverPathWorking,
+                    FileName = serverpath,
+                    UseShellExecute = true
 
-            };
+                };
+
+            }
+
+            else
+            {
+                serverpath = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "server" + Path.DirectorySeparatorChar + "Server.dll";
+                
+                return new ProcessStartInfo
+                {
+                    WindowStyle = ProcessWindowStyle.Normal,
+                    CreateNoWindow = false,
+                    FileName = "dotnet",
+                    Arguments = serverpath,
+                    WorkingDirectory = serverPathWorking,
+                    UseShellExecute = true
+
+                };
+
+
+            }
+           
 
         }
     }

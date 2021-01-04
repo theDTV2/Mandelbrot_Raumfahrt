@@ -4,7 +4,7 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
     <Deterministic>false</Deterministic>
-    <AssemblyVersion>1.0.7674.25702</AssemblyVersion>
+    <AssemblyVersion>1.0.7674.29137</AssemblyVersion>
   </PropertyGroup>
 
 </Project>

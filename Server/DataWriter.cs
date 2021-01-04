@@ -49,13 +49,13 @@ namespace Server
 
 #if DEBUG
                 //In debug we do it once per minute
-                if ((DateTime.Now - LastZipTime).Minutes > 1)
+                if ((DateTime.Now - LastZipTime).TotalSeconds > 60)
                     ZipOutputFile();
 #else
 
                 //Once per hour we zip our file for the satellite 
                 //TODO: Change this to .Minutes before release
-                if ((DateTime.Now - LastZipTime).Seconds > 60)
+                if ((DateTime.Now - LastZipTime).TotalSeconds > 60)
                     ZipOutputFile();
 #endif
                 //No need to check for new messages all the time
@@ -83,7 +83,7 @@ namespace Server
 
             var pathSource = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "outputfile";
             var pathSourceToZip = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "outputfiletozip";
-            var pathTarget = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "outputfilezipped.zip";
+            var pathTarget = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "output.zip";
 
             if (File.Exists(pathSourceToZip))
                 File.Delete(pathSourceToZip);
@@ -95,7 +95,7 @@ namespace Server
             File.Copy(pathSource, pathSourceToZip);
             using (ZipArchive archive = ZipFile.Open(pathTarget, ZipArchiveMode.Create))
             {
-                archive.CreateEntryFromFile(pathSourceToZip, pathTarget,CompressionLevel.Optimal);
+                archive.CreateEntryFromFile(pathSourceToZip,"output.txt",CompressionLevel.Optimal);
             }
         
 
