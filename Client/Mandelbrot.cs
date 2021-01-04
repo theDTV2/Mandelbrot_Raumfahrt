@@ -8,7 +8,10 @@ namespace Client
 {
     class Mandelbrot
     {
-        public static byte[] GenerateMandelbrotSet( float complexity, int iterations)  
+        private static int[] complexity = new int[4];
+        private static int[] iterations = new int[4];
+
+        private static byte[] GenerateMandelbrotSet( float complexity, int iterations)  
         {
             int sizex = 2;
             int sizey = 2;
@@ -18,7 +21,6 @@ namespace Client
             Complex[] Mandel;
 
             List<Complex> calcoutput = new List<Complex>();
-            var StartTime = DateTime.Now;
 
             for (int i = 0; i < complexity; i++)
             {
@@ -41,15 +43,40 @@ namespace Client
 
                 }
             }
-
-            var EndTime = DateTime.Now;
-            System.Console.WriteLine("");
-            System.Console.WriteLine("Iterations: " + complexity + " Complexity " + iterations + " Time elapsed: " + EndTime.Subtract(StartTime));
-            System.Console.WriteLine("Hash: " + String.Join(", ", calcoutput).GetSHA384HashAsString());
-
-
-
+            //System.Console.WriteLine("");
+            //System.Console.WriteLine("Iterations: " + complexity + " Complexity " + iterations + " Time elapsed: " + EndTime.Subtract(StartTime));
+           // System.Console.WriteLine("Hash: " + String.Join(", ", calcoutput).GetSHA384HashAsString());
             return String.Join(", ", calcoutput).GetSHA384Hash();
+        }
+
+
+        public static void GenerateMandelBrotParams()
+        {
+            var rand = new Random();
+
+            for (int i = 0; i < 4; i++)
+            {
+                complexity[i] = rand.Next(500, 800);
+            }
+
+            for (int i = 0; i < 4; i++)
+            {
+                iterations[i] = rand.Next(400, 800);
+            }
+        }
+
+        public static void DoMandelBrot()
+        {
+            for (int i = 0; i < 4; i++)
+            {
+
+                NetworkConnector.SendData("START");
+                var toSend = Encoding.UTF8.GetString(Mandelbrot.GenerateMandelbrotSet(complexity[i], iterations[i]));
+                NetworkConnector.SendData("STOP");
+                NetworkConnector.SendData(complexity[i], iterations[i], toSend);
+
+            }
+
         }
 
 
