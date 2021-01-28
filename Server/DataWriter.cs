@@ -26,7 +26,17 @@ namespace Server
 
             Console.WriteLine("Worker " + WorkerID + ": finished calculation, with parameters:" + complexity + " " + iterations + " in " + duration + " ms");
 
-            toWrite.Add(hash.Substring(5, 6) +" " + Math.Round(duration,1));
+            toWrite.Add(hash.Substring(5, 7) +" " + Math.Round(duration,1));
+        }
+
+        //Add a error message to be written
+        public static void WriteData(int WorkerID, string message)
+        {
+     
+
+            Console.WriteLine("Worker " + WorkerID + ": calculated a hash, that is not in the database...");
+
+            toWrite.Add(message.Substring(5, 7) + " " + WorkerID + "wrong hash");
         }
 
         //write all data, that is to be written

@@ -46,8 +46,10 @@ namespace Server
                                 if (HashValidator.ValidateHash(readstring))
                                     DataWriter.WriteData(WorkerID, readstring, elapsedTime);
                                 else
-                                    System.Console.WriteLine("Worker " + WorkerID + ": Invalid Data read");
-
+                                {
+         
+                                    DataWriter.WriteData(WorkerID, readstring);
+                                }
                             }
 
                             break;

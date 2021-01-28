@@ -49,16 +49,15 @@ namespace Client
 
         public static void GenerateMandelBrotParams()
         {
-            var rand = new Random();
-
+           
             for (int i = 0; i < 4; i++)
             {
-                complexity[i] = rand.Next(500, 800);
+                complexity[i] = 500 + i * 100;
             }
 
             for (int i = 0; i < 4; i++)
             {
-                iterations[i] = rand.Next(400, 800);
+                iterations[i] = 500 + i * 100;
             }
         }
 

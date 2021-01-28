@@ -16,12 +16,12 @@ namespace Controller
 
         public static  ProcessStartInfo GetClientVariable()
         {
-            var clientPathWorking = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "client" + Path.DirectorySeparatorChar;
+            var clientPathWorking = AppContext.BaseDirectory + "client" + Path.DirectorySeparatorChar;
 
             string clientpath;
             if (OperatingSystem.IsWindows())
             {
-                var clientPath = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "client" + Path.DirectorySeparatorChar + "Client.exe";
+                var clientPath = AppContext.BaseDirectory + "client" + Path.DirectorySeparatorChar + "Client.exe";
                 return new ProcessStartInfo
                 {
                     WindowStyle = ProcessWindowStyle.Normal,
@@ -34,7 +34,7 @@ namespace Controller
             }
             else
             {
-                clientpath = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "client" + Path.DirectorySeparatorChar + "Client.dll";
+                clientpath = AppContext.BaseDirectory + "client" + Path.DirectorySeparatorChar + "Client.dll";
                 return new ProcessStartInfo
                 {
                     WindowStyle = ProcessWindowStyle.Normal,
@@ -46,6 +46,8 @@ namespace Controller
 
                 };
 
+
+
             }
 
           
@@ -55,11 +57,11 @@ namespace Controller
         public static ProcessStartInfo GetServerVariable()
         {
             string serverpath;
-            var serverPathWorking = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "server" + Path.DirectorySeparatorChar;
+            var serverPathWorking = AppContext.BaseDirectory + "server" + Path.DirectorySeparatorChar;
 
             if (OperatingSystem.IsWindows())
             {
-                serverpath = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "server" + Path.DirectorySeparatorChar + "Server.exe";
+                serverpath = AppContext.BaseDirectory + "server" + Path.DirectorySeparatorChar + "Server.exe";
                 return new ProcessStartInfo
                 {
                     WindowStyle = ProcessWindowStyle.Normal,
@@ -74,8 +76,11 @@ namespace Controller
 
             else
             {
-                serverpath = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "server" + Path.DirectorySeparatorChar + "Server.dll";
-                
+                serverpath = AppContext.BaseDirectory + "server" + Path.DirectorySeparatorChar + "Server.dll";
+
+                System.Console.WriteLine("Using Path: " + serverpath);
+                System.Console.WriteLine("Working Directory: " + serverPathWorking);
+
                 return new ProcessStartInfo
                 {
                     WindowStyle = ProcessWindowStyle.Normal,
@@ -86,6 +91,7 @@ namespace Controller
                     UseShellExecute = true
 
                 };
+
 
 
             }
